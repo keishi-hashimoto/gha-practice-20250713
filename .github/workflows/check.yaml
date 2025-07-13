@@ -3,6 +3,7 @@ name: check-before-pr
 on:
   pull_request:
     branches: ["*"]
+    paths: ["**.py"]
 
   workflow_dispatch:
 

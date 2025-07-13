@@ -1,6 +1,10 @@
 [tools]
 uv = "0.5.26"
 actionlint = "latest"
+pre-commit = "latest"
 
 [tasks.actionlint]
 run = "actionlint"
+
+[tasks.pre-commit]
+run = "pre-commit"

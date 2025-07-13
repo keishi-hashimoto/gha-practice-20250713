@@ -1,0 +1,29 @@
+name: check-before-pr
+
+on:
+  pull_request:
+    branches: ["*"]
+
+  workflow_dispatch:
+
+jobs:
+  type_check:
+  runs_on: ubuntu-latest
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Install uv
+      users: astral-sh/setup-uv@v6
+
+    - name: Set up python
+      run: uv python install
+
+    - name: Install project
+      # --locked: uv.lock が最新化されていることをチェックする
+      # --all-extras: 追加の依存関係を全て含める
+      # --dev: --dev オプション付きでインストールしたものもインストール対象に含める
+      run: uv sync --locked --all-extras --dev
+
+    - name: Type check
+      uses: uv run ty check

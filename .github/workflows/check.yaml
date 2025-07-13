@@ -7,6 +7,10 @@ on:
 
   workflow_dispatch:
 
+env:
+  start_msg: Type check started
+  end_msg: Type check ended
+
 defaults:
   run:
     # bash を明示的に指定すると pipefail オプションが有効化される
@@ -18,6 +22,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5 # 未指定だと 6 時間
     steps:
+      - name: Declare start
+        run: echo "${start_msg}"
+
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -35,3 +42,7 @@ jobs:
 
       - name: Type check
         run: uv run ty check
+
+      - name: Notify End of type check
+        run: |
+          curl ${{ secrets.SLACK_URL }} -d "{\"text\": \"${end_msg}\"}"
